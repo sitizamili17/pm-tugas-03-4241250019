@@ -29,29 +29,31 @@ String validasiNilai(String teks) {
 
 /// Mengubah nilai huruf menjadi bobot (switch expression).
 int bobot(String huruf) => switch (huruf) {
-      'A' => 4,
-      'B' => 3,
-      'C' => 2,
-      'D' => 1,
-      _ => 0,
-    };
+  'A' => 4,
+  'B' => 3,
+  'C' => 2,
+  'D' => 1,
+  _ => 0,
+};
 
 /// IP = (jumlah SKS x bobot) / jumlah SKS, dihitung dengan fold.
 double hitungIp(List<MataKuliah> data) {
   final totalSks = data.fold<int>(0, (jumlah, m) => jumlah + m.sks);
   if (totalSks == 0) return 0;
-  final totalMutu =
-      data.fold<int>(0, (jumlah, m) => jumlah + m.sks * bobot(m.nilai));
+  final totalMutu = data.fold<int>(
+    0,
+    (jumlah, m) => jumlah + m.sks * bobot(m.nilai),
+  );
   return totalMutu / totalSks;
 }
 
 /// Predikat berdasarkan IP (skala contoh, sesuaikan pedoman akademik).
 String predikat(double ip) => switch (ip) {
-      >= 3.5 => 'Sangat Memuaskan',
-      >= 3.0 => 'Memuaskan',
-      >= 2.0 => 'Cukup',
-      _ => 'Kurang',
-    };
+  >= 3.5 => 'Sangat Memuaskan',
+  >= 3.0 => 'Memuaskan',
+  >= 2.0 => 'Cukup',
+  _ => 'Kurang',
+};
 
 /// Mencetak KHS. Parameter bernama [urutkan]: urut dari nilai tertinggi.
 void cetakKhs(List<MataKuliah> data, {bool urutkan = false}) {
@@ -74,8 +76,10 @@ void cetakKhs(List<MataKuliah> data, {bool urutkan = false}) {
   print('IP        : ${ip.toStringAsFixed(2)} (${predikat(ip)})');
 
   // where: ambil mata kuliah berbobot di bawah 2
-  final perbaiki =
-      data.where((m) => bobot(m.nilai) < 2).map((m) => m.nama).toList();
+  final perbaiki = data
+      .where((m) => bobot(m.nilai) < 2)
+      .map((m) => m.nama)
+      .toList();
   if (perbaiki.isNotEmpty) {
     print('Perlu diperbaiki: ${perbaiki.join(', ')}');
   }
